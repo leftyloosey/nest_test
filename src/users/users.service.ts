@@ -8,7 +8,8 @@ import { InjectModel } from '@nestjs/mongoose';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
   create(createUserDto: CreateUserDto) {
-    const savedUser = new this.userModel({ name: 'Frodo Baggings' });
+    const savedUser = new this.userModel(createUserDto);
+    // const savedUser = new this.userModel({ name: 'Frodo Baggings' });
     return savedUser.save();
     // return 'This action adds a new user';
   }
