@@ -38,10 +38,10 @@ export class CommentsController {
       });
     }
   }
-  // @Get()
-  // findAll() {
-  //   return this.commentsService.findAll();
-  // }
+  @Get('/top')
+  findTopLevel() {
+    return this.commentsService.getTopLevelComments();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
