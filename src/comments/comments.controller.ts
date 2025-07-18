@@ -1,15 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   Controller,
   Get,
   Post,
   Body,
-  Patch,
+  // Patch,
   Param,
   Delete,
+  Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+// import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -21,19 +24,34 @@ export class CommentsController {
   }
 
   @Get()
-  findAll() {
-    return this.commentsService.findAll();
+  findAll(@Query() queryParams) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (queryParams.parentId)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        return this.commentsService.getCommentsByParentId(queryParams.parentId);
+    } catch (error) {
+      throw new BadRequestException('Something bad happened', {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        cause: new Error(error.message),
+        description: 'Some error description',
+      });
+    }
   }
+  // @Get()
+  // findAll() {
+  //   return this.commentsService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.commentsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
+  //   return this.commentsService.update(+id, updateCommentDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
