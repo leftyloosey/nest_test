@@ -42,6 +42,10 @@ export class CommentsController {
   findTopLevel() {
     return this.commentsService.getTopLevelComments();
   }
+  @Get('/awl')
+  findAwl() {
+    return this.commentsService.findAll();
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
